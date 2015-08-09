@@ -26,7 +26,7 @@ class MainContainer(children: Seq[WebComponent]) extends WebComponent {
 
 }
 
-class DropDown(textUpdate: (String => Unit) = NoOps.String) extends WebComponent {
+class TextInput(textUpdate: (String => Unit) = NoOps.String) extends WebComponent {
 
   private val html = input(
     placeholder := "Type to uppercase",
@@ -43,9 +43,17 @@ class DropDown(textUpdate: (String => Unit) = NoOps.String) extends WebComponent
 
 class TextOutput(initialText: String = "") extends WebComponent {
 
-  private val output = blockquote(
-    p(initialText)
-  )
+  private val paragraph = p(initialText).render
+  private val b = blockquote().render
 
-  override def render: HTMLElement = output.render
+  override def render: HTMLElement = {
+    b.appendChild(paragraph)
+    b
+  }
+
+  def setOutput(o: String) = paragraph.textContent = o
+}
+
+class UpperCaseOutput extends TextOutput {
+  override def setOutput(o: String) = super.setOutput(o.toUpperCase)
 }

@@ -2,10 +2,8 @@ package tutorial.webapp
 
 import org.scalajs.dom
 import org.scalajs.dom.Event
-import org.scalajs.dom.raw.HTMLElement
 
 import scala.scalajs.js.JSApp
-import scalatags.JsDom.all._
 
 object TutorialApp extends JSApp
   with Appending {
@@ -13,8 +11,9 @@ object TutorialApp extends JSApp
   def main(): Unit = {
     dom.document.addEventListener("DOMContentLoaded", { e: Event =>
       println("loaded")
-      val dropDown = new DropDown(textUpdate = println)
-      val container = new MainContainer(Seq(dropDown))
+      val output = new UpperCaseOutput()
+      val dropDown = new TextInput(textUpdate = output.setOutput)
+      val container = new MainContainer(Seq(dropDown, output))
       append(container)
     })
   }
