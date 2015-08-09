@@ -1,22 +1,59 @@
 package tutorial.webapp
 
-import scala.scalajs.js.JSApp
-
+import org.scalajs.dom
+import org.scalajs.dom.raw.{HTMLElement, KeyboardEvent}
 import org.scalajs.jquery.jQuery
 
-object TutorialApp extends JSApp {
+import scala.scalajs.js.JSApp
+import scalatags.JsDom.TypedTag
+import scalatags.JsDom.all._
+
+
+object TutorialApp extends JSApp
+  with Appending {
+
   def main(): Unit = {
     jQuery(setupUI _)
   }
 
   def setupUI(): Unit = {
     jQuery("""<button type="button">Click me!</button>""")
-      .click(addClickedMessage _)
       .appendTo(jQuery("body"))
-    jQuery("body").append("<p>Hello World</p>")
+    jQuery("body").append("<p>World</p>")
   }
 
   def addClickedMessage(): Unit = {
-    jQuery("body").append("<p>You clicked the button!</p>")
+    val dropDown = new DropDown(textUpdate = Some(println))
+    append(dropDown)
   }
+
+}
+
+trait Appending {
+  def append(heading: TypedTag[HTMLElement]): Unit =
+    dom.document.body.appendChild(heading.render)
+
+  def append(component: WebComponent): Unit =
+    dom.document.body.appendChild(component.render)
+
+}
+
+trait WebComponent {
+  def render: HTMLElement
+}
+
+class DropDown(textUpdate: Option[(String => Unit)] = None) extends WebComponent {
+
+  private val html = input(
+    placeholder := "Type to uppercase"
+  ).render
+
+  html.onkeyup = { e: KeyboardEvent =>
+    textUpdate.foreach { f =>
+      val value = html.value
+      f(value)
+    }
+  }
+
+  override def render: HTMLElement = html
 }
