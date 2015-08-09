@@ -12,7 +12,7 @@ object NoOps{
   val String = { s:String => () }
 }
 
-class MainContainer(children: Seq[WebComponent]) extends WebComponent {
+class MainContainer(children: WebComponent*) extends WebComponent {
 
   private val mainContainer = div(`class` := "container",
     h1("Web components with ScalaJS")

@@ -13,7 +13,7 @@ object TutorialApp extends JSApp
       println("loaded")
       val output = new UpperCaseOutput()
       val dropDown = new TextInput(textUpdate = output.setOutput)
-      val container = new MainContainer(Seq(dropDown, output))
+      val container = new MainContainer(dropDown, output)
       append(container)
     })
   }
